@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
+    [SerializeField] private Transform debugPrefab;
+    private GridSystem gridSystem;
+
     private void Start()
     {
-        new GridSystem(10, 10, 2);
+        gridSystem = new GridSystem(10, 10, 2);
+        gridSystem.CreateDebugObject(debugPrefab);
+    }
+
+    private void Update()
+    {
+        //Debug.Log($"Mouse Position : {MouseWorld.GetPosition()} and GridPosition : {gridSystem.GetGridPosition(MouseWorld.GetPosition())}");
     }
 }

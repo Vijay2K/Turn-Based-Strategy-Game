@@ -807,6 +807,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b4fb2b0161c5644b93ce493d18fe1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugPrefab: {fileID: 1558442425911097093, guid: 9f9d9766121b7d44ea580b6467b7c38a,
+    type: 3}
 --- !u!1001 &7635392565784473615
 PrefabInstance:
   m_ObjectHideFlags: 0
