@@ -11,10 +11,9 @@ public class GridObjectDebug : MonoBehaviour
     public void SetGridObject(GridObject gridObject)
     {
         this.gridObject = gridObject;
-        UpdateText();
     }
 
-    private void UpdateText()
+    private void Update()
     {
         debugText.text = gridObject.ToString();
     }
