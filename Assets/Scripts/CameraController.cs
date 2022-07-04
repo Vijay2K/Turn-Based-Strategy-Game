@@ -1,30 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float moverSpeed;
-    [SerializeField] private float rotationSpeed;
+    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
+    [SerializeField] private float cam_moverSpeed;
+    [SerializeField] private float cam_rotationSpeed;
+    [SerializeField] private float cam_zoomSpeed;
+
+    private const float MIN_FOLLOW_Y_OFFSET = 2;
+    private const float MAX_FOLLOW_Y_OFFSET = 12;
+    private CinemachineTransposer cinemachineTransposer;
+    private Vector3 targetFollowOffset;
+
+    private void Start()
+    {
+        cinemachineTransposer = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        targetFollowOffset = cinemachineTransposer.m_FollowOffset;
+    }
 
     void Update()
     {
+        HandleMovement();
+
+        HandleRotation();
+
+        HandleZoom();
+    }
+
+    private void HandleMovement()
+    {
         Vector3 moverInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         Vector3 moverDirection = transform.forward * moverInput.z + transform.right * moverInput.x;
-        transform.position += moverDirection * moverSpeed * Time.deltaTime;
+        transform.position += moverDirection * cam_moverSpeed * Time.deltaTime;
+    }
 
+    private void HandleRotation()
+    {
         Vector3 rotationVector = new Vector3(0, 0, 0);
 
-        if(Input.GetKey(KeyCode.Q))
-        {
-            rotationVector.y += -1f;
-        }
-        else if(Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.Q))
         {
             rotationVector.y += 1f;
         }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            rotationVector.y += -1f;
+        }
 
         rotationVector.Normalize();
-        transform.eulerAngles += rotationVector * rotationSpeed * Time.deltaTime;
+        transform.eulerAngles += rotationVector * cam_rotationSpeed * Time.deltaTime;
     }
+
+    private void HandleZoom()
+    {
+        float zoomValue = 1f;
+        if (Input.mouseScrollDelta.y > 0)
+        {
+            targetFollowOffset.y -= zoomValue;
+        }
+        else if (Input.mouseScrollDelta.y < 0)
+        {
+            targetFollowOffset.y += zoomValue;
+        }
+
+        targetFollowOffset.y = Mathf.Clamp(targetFollowOffset.y, MIN_FOLLOW_Y_OFFSET, MAX_FOLLOW_Y_OFFSET);
+        cinemachineTransposer.m_FollowOffset = Vector3.Lerp(cinemachineTransposer.m_FollowOffset, targetFollowOffset,
+            Time.deltaTime * cam_zoomSpeed);
+    }
+
 }
