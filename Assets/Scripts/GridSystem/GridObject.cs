@@ -28,6 +28,11 @@ public class GridObject
         return unitList;
     }
 
+    public bool HasAnyUnit()
+    {
+        return unitList.Count > 0;
+    }
+
     public override string ToString()
     {
         string unitName = "";
