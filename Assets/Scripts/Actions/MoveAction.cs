@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveAction : MonoBehaviour
+public class MoveAction : BaseAction
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -10,31 +10,34 @@ public class MoveAction : MonoBehaviour
     [SerializeField] private Animator unitAnimator;
 
     private Vector3 targetPosition;
-    private Unit unit;
 
-    private void Awake()
+    protected override void Awake()
     {
-        unit = GetComponent<Unit>();
+        base.Awake();
         targetPosition = transform.position;
     }
 
     private void Update()
     {
+        if (!isActive) return;
+
         float stoppingDistance = 0.1f;
         float distance = Vector3.Distance(transform.position, targetPosition);
+        Vector3 moveDirection = (targetPosition - transform.position).normalized;
 
         if (distance > stoppingDistance)
         {
-            Vector3 moveDirection = (targetPosition - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             transform.position += moveDirection * moveSpeed * Time.deltaTime;
             unitAnimator.SetBool("IsWalking", true);
         }
         else
         {
             unitAnimator.SetBool("IsWalking", false);
+            isActive = false;
         }
+
+        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
     public bool IsValidActionGridPosition(GridPosition gridPosition)
@@ -61,7 +64,6 @@ public class MoveAction : MonoBehaviour
                 if (LevelGrid.Instance.HasAnyUnitAtGridPosition(gridPosition)) continue;
 
                 validGridPosition.Add(gridPosition);
-                Debug.Log(gridPosition.ToString());
             }
         }
 
@@ -71,5 +73,6 @@ public class MoveAction : MonoBehaviour
     public void Move(GridPosition gridPosition)
     {
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+        isActive = true;
     }
 }

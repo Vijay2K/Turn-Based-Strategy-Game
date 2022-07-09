@@ -8,14 +8,14 @@ public class GridSystemVisual : MonoBehaviour
 
     private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
 
-    private void Start()
+    private void Awake()
     {
         gridSystemVisualSingleArray = new GridSystemVisualSingle[
-                LevelGrid.Instance.GetWidth(),
+              LevelGrid.Instance.GetWidth(),
                 LevelGrid.Instance.GetHeight()
             ];
 
-        for(int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
+        for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
         {
             for(int z = 0; z < LevelGrid.Instance.GetHeight(); z++)
             {
@@ -33,9 +33,12 @@ public class GridSystemVisual : MonoBehaviour
 
     public void HideAllGridPosition()
     {
-        foreach(GridSystemVisualSingle gridSystemVisualSingle in gridSystemVisualSingleArray)
+        for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
         {
-            gridSystemVisualSingle.Hide();
+            for (int z = 0; z < LevelGrid.Instance.GetHeight(); z++)
+            {
+                gridSystemVisualSingleArray[x, z].Hide();
+            }
         }
     }
 
