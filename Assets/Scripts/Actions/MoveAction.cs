@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,7 @@ public class MoveAction : BaseAction
         }
         else
         {
+            onActionComplete.Invoke();
             unitAnimator.SetBool("IsWalking", false);
             isActive = false;
         }
@@ -70,9 +72,15 @@ public class MoveAction : BaseAction
         return validGridPosition;
     }
 
-    public void Move(GridPosition gridPosition)
+    public void Move(GridPosition gridPosition, Action onMovementCompleted)
     {
+        onActionComplete = onMovementCompleted;
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
         isActive = true;
+    }
+
+    public override string GetActionName()
+    {
+        return "Move";
     }
 }
