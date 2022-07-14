@@ -12,5 +12,9 @@ public class ActionButtonUI : MonoBehaviour
     public void SetBaseAction(BaseAction baseAction)
     {
         actionText.text = baseAction.GetActionName().ToUpper();
+        actionButton.onClick.AddListener(() =>
+        {
+            UnitActionSelection.Instance.SetSelectedAction(baseAction);
+        });
     }
 }

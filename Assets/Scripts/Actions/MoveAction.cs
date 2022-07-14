@@ -50,7 +50,7 @@ public class MoveAction : BaseAction
 
     public List<GridPosition> GetValidGridPositions()
     {
-        List<GridPosition> validGridPosition = new List<GridPosition>();
+        List<GridPosition> validGridPositionList = new List<GridPosition>();
 
         GridPosition unitGridPosition = unit.GetGridPosition();
 
@@ -65,11 +65,11 @@ public class MoveAction : BaseAction
                 if (unitGridPosition == gridPosition) continue;
                 if (LevelGrid.Instance.HasAnyUnitAtGridPosition(gridPosition)) continue;
 
-                validGridPosition.Add(gridPosition);
+                validGridPositionList.Add(gridPosition);
             }
         }
 
-        return validGridPosition;
+        return validGridPositionList;
     }
 
     public void Move(GridPosition gridPosition, Action onMovementCompleted)
