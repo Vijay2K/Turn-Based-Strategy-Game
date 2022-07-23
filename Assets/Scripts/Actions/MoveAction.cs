@@ -73,6 +73,11 @@ public class MoveAction : BaseAction
         isActive = true;
     }
 
+    public override int GetActionCost()
+    {
+        return 1;
+    }
+
     public override string GetActionName()
     {
         return "Move";

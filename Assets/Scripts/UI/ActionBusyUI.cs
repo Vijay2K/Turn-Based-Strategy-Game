@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class ActionBusyUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        UnitActionSelection.Instance.onBusyChanged += UnitActionSelection_OnBusyChanged;
+        Hide();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Show()
     {
-        
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void UnitActionSelection_OnBusyChanged(object sender, bool isBusy)
+    {
+        if (isBusy)
+            Show();
+        else
+            Hide();
     }
 }
