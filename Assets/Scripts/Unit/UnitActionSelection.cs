@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitActionSelection : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UnitActionSelection : MonoBehaviour
     [SerializeField] private LayerMask unitLayerMask;
 
     public event EventHandler onSelectedUnitChanged;
+    public event EventHandler onSelectedActionChanged;
 
     private bool isBusy;
     private BaseAction selectedAction;
@@ -36,6 +38,8 @@ public class UnitActionSelection : MonoBehaviour
     {
         if (isBusy) return;
 
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         if (TryHandleUnitSelection()) return;
 
         HandleSelectedAction();
@@ -50,6 +54,9 @@ public class UnitActionSelection : MonoBehaviour
             {
                 if (raycastHit.collider.TryGetComponent<Unit>(out Unit unit))
                 {
+                    if (unit == selectedUnit) 
+                        return false;
+                    
                     SetSelectedUnit(unit);
                     return true;
                 }
@@ -65,19 +72,10 @@ public class UnitActionSelection : MonoBehaviour
         {
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
 
-            switch (selectedAction)
+            if(selectedAction.IsValidActionGridPosition(mouseGridPosition))
             {
-                case MoveAction moveAction:
-                    if(moveAction.IsValidActionGridPosition(mouseGridPosition))
-                    {
-                        SetBusy();
-                        moveAction.Move(mouseGridPosition, ClearBusy);
-                    }
-                    break;
-                case SpinAction spinAction:
-                    SetBusy();
-                    spinAction.Spin(ClearBusy);
-                    break;
+                SetBusy();
+                selectedAction.TakeAction(mouseGridPosition, ClearBusy);
             }
         }
     }
@@ -92,11 +90,17 @@ public class UnitActionSelection : MonoBehaviour
     public void SetSelectedAction(BaseAction baseAction)
     {
         this.selectedAction = baseAction;
+        onSelectedActionChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public Unit GetSelectedUnit()
     {
         return selectedUnit;
+    }
+
+    public BaseAction GetSelectedAction()
+    {
+        return selectedAction;
     }
 
     public void SetBusy()

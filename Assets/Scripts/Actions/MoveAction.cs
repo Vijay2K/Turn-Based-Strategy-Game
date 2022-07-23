@@ -42,13 +42,7 @@ public class MoveAction : BaseAction
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
-    public bool IsValidActionGridPosition(GridPosition gridPosition)
-    {
-        List<GridPosition> validGridPositionList = GetValidGridPositions();
-        return validGridPositionList.Contains(gridPosition);
-    }
-
-    public List<GridPosition> GetValidGridPositions()
+    public override List<GridPosition> GetValidGridPositions()
     {
         List<GridPosition> validGridPositionList = new List<GridPosition>();
 
@@ -72,9 +66,9 @@ public class MoveAction : BaseAction
         return validGridPositionList;
     }
 
-    public void Move(GridPosition gridPosition, Action onMovementCompleted)
+    public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        onActionComplete = onMovementCompleted;
+        this.onActionComplete = onActionComplete;
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
         isActive = true;
     }

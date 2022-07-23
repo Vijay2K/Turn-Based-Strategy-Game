@@ -9,10 +9,20 @@ public class UnitActionSelectionUI : MonoBehaviour
     [SerializeField] private Transform actionButtonUIPrefab;
     [SerializeField] private Transform actionButtonContainer;
 
+    private List<ActionButtonUI> actionButtonList;
+
+    private void Awake()
+    {
+        actionButtonList = new List<ActionButtonUI>();
+    }
+
     private void Start()
     {
-        CreateActionUIButtons();
         UnitActionSelection.Instance.onSelectedUnitChanged += UnitActionSelection_OnSelectedUnitChanged;
+        UnitActionSelection.Instance.onSelectedActionChanged += UnitActionSelection_OnSelectedActionChanged;
+
+        CreateActionUIButtons();
+        UpdateSelectedVisual();
     }
 
     private void CreateActionUIButtons()
@@ -22,16 +32,35 @@ public class UnitActionSelectionUI : MonoBehaviour
             Destroy(buttonTransform.gameObject);
         }
 
+        actionButtonList.Clear();
+
         Unit selectedUnit = UnitActionSelection.Instance.GetSelectedUnit();
         foreach(BaseAction baseAction in selectedUnit.GetBaseActionArray())
         {
             Transform actionButtonTransform = Instantiate(actionButtonUIPrefab, actionButtonContainer);
-            actionButtonTransform.GetComponent<ActionButtonUI>().SetBaseAction(baseAction);
+            ActionButtonUI actionButtonUI = actionButtonTransform.GetComponent<ActionButtonUI>();
+            actionButtonUI.SetBaseAction(baseAction);
+
+            actionButtonList.Add(actionButtonUI);
         }
     }
 
     private void UnitActionSelection_OnSelectedUnitChanged(object sender, EventArgs args)
     {
         CreateActionUIButtons();
+        UpdateSelectedVisual();
+    }
+
+    private void UnitActionSelection_OnSelectedActionChanged(object sender, EventArgs args)
+    {
+        UpdateSelectedVisual();
+    }
+
+    private void UpdateSelectedVisual()
+    {
+        foreach(ActionButtonUI actionButton in actionButtonList)
+        {
+            actionButton.UpdateSelectedVisual();
+        }
     }
 }
