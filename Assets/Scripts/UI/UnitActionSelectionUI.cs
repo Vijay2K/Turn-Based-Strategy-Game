@@ -22,6 +22,8 @@ public class UnitActionSelectionUI : MonoBehaviour
         UnitActionSelection.Instance.onSelectedUnitChanged += UnitActionSelection_OnSelectedUnitChanged;
         UnitActionSelection.Instance.onSelectedActionChanged += UnitActionSelection_OnSelectedActionChanged;
         UnitActionSelection.Instance.onActionStarted += UnitActionSelection_OnActionChanged;
+        TurnSystem.Instance.onTurnChanged += TurnSystem_OnTurnChanged;
+        Unit.onActionPointsChanged += Unit_OnActionPointChanged;
 
         CreateActionUIButtons();
         UpdateSelectedVisual();
@@ -48,6 +50,20 @@ public class UnitActionSelectionUI : MonoBehaviour
         }
     }
 
+    private void UpdateSelectedVisual()
+    {
+        foreach (ActionButtonUI actionButton in actionButtonList)
+        {
+            actionButton.UpdateSelectedVisual();
+        }
+    }
+
+    private void UpdateActionPoint()
+    {
+        Unit selectedUnit = UnitActionSelection.Instance.GetSelectedUnit();
+        actionPointsTextUI.text = "Action points : " + selectedUnit.GetActionPoints();
+    }
+
     private void UnitActionSelection_OnSelectedUnitChanged(object sender, EventArgs args)
     {
         CreateActionUIButtons();
@@ -65,17 +81,14 @@ public class UnitActionSelectionUI : MonoBehaviour
         UpdateActionPoint();
     }
 
-    private void UpdateSelectedVisual()
+    private void TurnSystem_OnTurnChanged(object sender, EventArgs args)
     {
-        foreach(ActionButtonUI actionButton in actionButtonList)
-        {
-            actionButton.UpdateSelectedVisual();
-        }
+        UpdateActionPoint();
     }
 
-    private void UpdateActionPoint()
+    private void Unit_OnActionPointChanged(object sender, EventArgs args)
     {
-        Unit selectedUnit = UnitActionSelection.Instance.GetSelectedUnit();
-        actionPointsTextUI.text = "Action points : " + selectedUnit.GetActionPoints();
+        UpdateActionPoint();
     }
+
 }
