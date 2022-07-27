@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    [SerializeField] private bool isEnemy;
+
     public static event EventHandler onActionPointsChanged;
 
     private const int MAX_ACTION_POINTS = 2;
@@ -64,8 +66,14 @@ public class Unit : MonoBehaviour
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs args)
     {
-        actionPoints = MAX_ACTION_POINTS;
-        onActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        if(isEnemy && !TurnSystem.Instance.IsPlayerTurn() || 
+            (!isEnemy && TurnSystem.Instance.IsPlayerTurn())) 
+        {
+            actionPoints = MAX_ACTION_POINTS;
+            onActionPointsChanged?.Invoke(this, EventArgs.Empty);
+
+        }
+
     }
 
     public MoveAction GetMoveAction() => moveAction;
@@ -73,6 +81,6 @@ public class Unit : MonoBehaviour
     public GridPosition GetGridPosition() => gridPosition;
     public BaseAction[] GetBaseActionArray() => baseActionArray;
     public int GetActionPoints() => actionPoints;
-
+    public bool IsEnemy() => isEnemy;
 }
 
