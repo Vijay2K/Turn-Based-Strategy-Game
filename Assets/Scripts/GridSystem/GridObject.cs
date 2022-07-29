@@ -28,6 +28,16 @@ public class GridObject
         return unitList;
     }
 
+    public Unit GetUnit()
+    {
+        if(HasAnyUnit())
+        {
+            return unitList[0];
+        }
+
+        return null;
+    }
+
     public bool HasAnyUnit()
     {
         return unitList.Count > 0;
