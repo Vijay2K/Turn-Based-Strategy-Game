@@ -76,6 +76,16 @@ public class Unit : MonoBehaviour
 
     }
 
+    public void Damage()
+    {
+        Debug.Log(gameObject.name + " damage.");
+    }
+
+    public Vector3 GetWorldPosition() 
+    {
+        return transform.position;
+    }
+
     public MoveAction GetMoveAction() => moveAction;
     public SpinAction GetSpinAction() => spinAction;
     public GridPosition GetGridPosition() => gridPosition;
