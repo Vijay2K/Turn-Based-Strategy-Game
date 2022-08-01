@@ -9,8 +9,16 @@ public class ShootAction : BaseAction
     {
         AIMING, SHOOTING, COOLOFF
     }
-
+    
     [SerializeField] private int maxShootDistance = 7;
+
+    public class OnShootEventArgs : EventArgs
+    {
+        public Unit targetUnit;
+        public Unit shootingUnit;
+    }
+
+    public event EventHandler<OnShootEventArgs> onShoot;
 
     private State state;
     private float stateTimer;
@@ -27,12 +35,7 @@ public class ShootAction : BaseAction
         switch(state)
         {
             case State.AIMING:
-
-                float rotationSpeed = 15f;
-                Vector3 tragetDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
-                Quaternion targetRotation = Quaternion.LookRotation(tragetDirection);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-
+                AimTowardsTheTarget();
                 break;
             case State.SHOOTING:
                 if(canShoot)
@@ -51,8 +54,22 @@ public class ShootAction : BaseAction
         }
     }
 
+    private void AimTowardsTheTarget()
+    {
+        float rotationSpeed = 15f;
+        Vector3 tragetDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(tragetDirection);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
     private void Shoot()
     {
+        onShoot?.Invoke(this, new OnShootEventArgs
+        {
+            targetUnit = this.targetUnit,
+            shootingUnit = this.unit
+        });
+
         targetUnit.Damage();
     }
 
