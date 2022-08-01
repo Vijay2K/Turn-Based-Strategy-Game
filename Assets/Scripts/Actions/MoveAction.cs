@@ -8,7 +8,9 @@ public class MoveAction : BaseAction
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private int maxGridPosition = 1;
-    [SerializeField] private Animator unitAnimator;
+
+    public event EventHandler onStartMoving;
+    public event EventHandler onStopMoving;
 
     private Vector3 targetPosition;
 
@@ -29,13 +31,11 @@ public class MoveAction : BaseAction
         if (distance > stoppingDistance)
         {
             transform.position += moveDirection * moveSpeed * Time.deltaTime;
-            unitAnimator.SetBool("IsWalking", true);
         }
         else
         {
-            onActionComplete.Invoke();
-            unitAnimator.SetBool("IsWalking", false);
-            isActive = false;
+            ActionCompleted();
+            onStopMoving(this, EventArgs.Empty);
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
@@ -68,9 +68,9 @@ public class MoveAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        this.onActionComplete = onActionComplete;
+        ActionStart(onActionComplete);
+        onStartMoving(this, EventArgs.Empty);
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
-        isActive = true;
     }
 
     public override int GetActionCost()

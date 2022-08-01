@@ -24,6 +24,18 @@ public abstract class BaseAction : MonoBehaviour
         return 1;
     }
 
+    protected void ActionStart(Action onActionComplete)
+    {
+        this.onActionComplete = onActionComplete;
+        isActive = true;
+    }
+
+    protected void ActionCompleted()
+    {
+        isActive = false;
+        onActionComplete?.Invoke();
+    }
+
     public abstract string GetActionName();
     public abstract void TakeAction(GridPosition gridPosition, Action onActionComplete);
     public abstract List<GridPosition> GetValidGridPositions();
