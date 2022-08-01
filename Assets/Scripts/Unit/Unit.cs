@@ -9,19 +9,23 @@ public class Unit : MonoBehaviour
 
     public static event EventHandler onActionPointsChanged;
 
-    private const int MAX_ACTION_POINTS = 2;
+    private const int MAX_ACTION_POINTS = 5;
 
     private GridPosition gridPosition;
     private MoveAction moveAction;
     private SpinAction spinAction;
     private BaseAction[] baseActionArray;
+    private HealthSystem healthSystem;
     private int actionPoints = MAX_ACTION_POINTS;
 
     private void Awake()
     {
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
-        baseActionArray = GetComponents<BaseAction>();        
+        baseActionArray = GetComponents<BaseAction>();
+        healthSystem = GetComponent<HealthSystem>();
+
+        healthSystem.onDead += HealthSystem_OnDead;
     }
 
     private void Start()
@@ -71,14 +75,18 @@ public class Unit : MonoBehaviour
         {
             actionPoints = MAX_ACTION_POINTS;
             onActionPointsChanged?.Invoke(this, EventArgs.Empty);
-
         }
-
     }
 
-    public void Damage()
+    public void Damage(int damageAmount)
     {
-        Debug.Log(gameObject.name + " damage.");
+        healthSystem.Damage(damageAmount);
+    }
+
+    private void HealthSystem_OnDead(object sender, EventArgs args)
+    {
+        LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this);
+        Destroy(gameObject);
     }
 
     public Vector3 GetWorldPosition() 
