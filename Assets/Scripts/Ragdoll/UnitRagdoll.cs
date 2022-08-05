@@ -9,6 +9,7 @@ public class UnitRagdoll : MonoBehaviour
     public void SetUp(Transform originalRootBone)
     {
         MatchAllChildTransform(originalRootBone, ragdollRootBone);
+        ApplyExplosionToRagdoll(ragdollRootBone, 100f, transform.position, 1f);
     }
 
     private void MatchAllChildTransform(Transform root, Transform clone)
@@ -26,9 +27,17 @@ public class UnitRagdoll : MonoBehaviour
         }
     }
 
-    private void ApplyExplosionToRagdoll(Transform root)
+    private void ApplyExplosionToRagdoll(Transform root, float explosionForce, Vector3 explosionPosition, float explosionRange)
     {
-        
+        foreach(Transform child in root)
+        {
+            if(child.TryGetComponent<Rigidbody>(out Rigidbody childRigidBody))
+            {
+                childRigidBody.AddExplosionForce(explosionForce, explosionPosition, explosionRange);
+            }
+
+            ApplyExplosionToRagdoll(child, explosionForce, explosionPosition, explosionRange);
+        }
     }
 
 }
