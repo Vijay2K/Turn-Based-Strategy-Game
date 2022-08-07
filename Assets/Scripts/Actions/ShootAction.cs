@@ -146,4 +146,6 @@ public class ShootAction : BaseAction
     {
         return 1;
     }
+
+    public int GetMaxShootingRange() => maxShootDistance;
 }

@@ -14,11 +14,11 @@ public class Testing : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            //unit.GetComponent<MoveAction>().GetValidGridPositions();
-            gridSystemVisual.HideAllGridPosition();
-            gridSystemVisual.ShowGridPositionList(unit.GetComponent<MoveAction>().GetValidGridPositions());
-        }
+        // if(Input.GetKeyDown(KeyCode.T))
+        // {
+        //     //unit.GetComponent<MoveAction>().GetValidGridPositions();
+        //     gridSystemVisual.HideAllGridPosition();
+        //     gridSystemVisual.ShowGridPositionList(unit.GetComponent<MoveAction>().GetValidGridPositions());
+        // }
     }
 }

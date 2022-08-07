@@ -397,7 +397,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7760562, y: 1}
+    m_SensorSize: {x: 1.7783507, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -413,8 +413,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 194386864}
-  m_LocalRotation: {x: 0.38268343, y: 0.000000028007205, z: -0.000000011600964, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 10, z: -10}
+  m_LocalRotation: {x: 0.33100694, y: 0.000000016236429, z: -0.0000000056954312, w: 0.9436284}
+  m_LocalPosition: {x: 0, y: 8, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1575,7 +1575,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7760562, y: 1}
+    m_SensorSize: {x: 1.7783507, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2839,6 +2839,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridVisualPrefab: {fileID: 1139880081817409837, guid: 489e1693285b09f4a91c129486d0ff8e,
     type: 3}
+  gridVisualTypeMaterialList:
+  - gridVisualType: 0
+    gridMaterial: {fileID: 2100000, guid: 0f4e50d13a256c84a90e97cc28312268, type: 2}
+  - gridVisualType: 1
+    gridMaterial: {fileID: 2100000, guid: 26222c436dadb934a84b9a4ac8fdb526, type: 2}
+  - gridVisualType: 2
+    gridMaterial: {fileID: 2100000, guid: 89fae71348381ee4ab5b84eeffcb9cb8, type: 2}
+  - gridVisualType: 3
+    gridMaterial: {fileID: 2100000, guid: d4773a4d1a5a83645a171ba9bab0ad9a, type: 2}
+  - gridVisualType: 4
+    gridMaterial: {fileID: 2100000, guid: 1ddcb0ba33ff38b49a3b95d923451ef2, type: 2}
 --- !u!1001 &1855886100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3224,7 +3235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 10, z: -10}
+  m_FollowOffset: {x: 0, y: 8, z: -10}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0
