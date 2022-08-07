@@ -4,6 +4,9 @@ using UnityEngine;
 
 public abstract class BaseAction : MonoBehaviour
 {
+    public static event EventHandler onActionStarted;
+    public static event EventHandler onActionStopped;
+
     protected Unit unit;
     protected bool isActive;
     protected Action onActionComplete;
@@ -28,14 +31,17 @@ public abstract class BaseAction : MonoBehaviour
     {
         this.onActionComplete = onActionComplete;
         isActive = true;
+        onActionStarted?.Invoke(this, EventArgs.Empty);
     }
 
     protected void ActionCompleted()
     {
         isActive = false;
         onActionComplete?.Invoke();
+        onActionStopped?.Invoke(this, EventArgs.Empty);
     }
 
+    public Unit GetUnit() => unit;
     public abstract string GetActionName();
     public abstract void TakeAction(GridPosition gridPosition, Action onActionComplete);
     public abstract List<GridPosition> GetValidGridPositions();

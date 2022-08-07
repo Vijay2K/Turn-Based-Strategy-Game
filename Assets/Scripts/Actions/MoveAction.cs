@@ -34,8 +34,8 @@ public class MoveAction : BaseAction
         }
         else
         {
+            onStopMoving?.Invoke(this, EventArgs.Empty);
             ActionCompleted();
-            onStopMoving(this, EventArgs.Empty);
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
@@ -68,9 +68,9 @@ public class MoveAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        ActionStart(onActionComplete);
-        onStartMoving(this, EventArgs.Empty);
+        onStartMoving?.Invoke(this, EventArgs.Empty);
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+        ActionStart(onActionComplete);
     }
 
     public override int GetActionCost()
