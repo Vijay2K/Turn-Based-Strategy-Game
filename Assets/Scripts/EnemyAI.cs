@@ -5,7 +5,18 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
+    private enum State
+    {
+        WaitForEnemyTurn, TakingTurn, Busy
+    }
+
+    private State state;
     private float timer;
+
+    private void Awake() 
+    {
+        state = State.WaitForEnemyTurn;
+    }
 
     private void Start()
     {
@@ -17,6 +28,22 @@ public class EnemyAI : MonoBehaviour
         if (TurnSystem.Instance.IsPlayerTurn())
             return;
 
+        switch(state)
+        {
+            case State.WaitForEnemyTurn:
+                break;
+            case State.TakingTurn:
+                timer -= Time.deltaTime;
+                if(timer <= 0f)
+                {
+                    state = State.WaitForEnemyTurn;
+                    TurnSystem.Instance.NextTurn();
+                }
+                break;
+            case State.Busy:
+                break;
+        }
+
         timer -= Time.deltaTime;
         if(timer <= 0f)
         {
@@ -26,6 +53,10 @@ public class EnemyAI : MonoBehaviour
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs args)
     {
-        timer = 2f;
+        if(!TurnSystem.Instance.IsPlayerTurn())
+        {
+            state = State.TakingTurn;
+            timer = 2f;
+        }
     }
 }
