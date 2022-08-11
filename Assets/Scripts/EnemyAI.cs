@@ -36,18 +36,18 @@ public class EnemyAI : MonoBehaviour
                 timer -= Time.deltaTime;
                 if(timer <= 0f)
                 {
-                    state = State.WaitForEnemyTurn;
-                    TurnSystem.Instance.NextTurn();
+                    if(TryTakeEnemyAIAction(SetStateTakeAction))
+                    {
+                        state = State.Busy;
+                    }
+                    else
+                    {
+                        TurnSystem.Instance.NextTurn();
+                    }
                 }
                 break;
             case State.Busy:
                 break;
-        }
-
-        timer -= Time.deltaTime;
-        if(timer <= 0f)
-        {
-            TurnSystem.Instance.NextTurn();
         }
     }
 
@@ -58,5 +58,46 @@ public class EnemyAI : MonoBehaviour
             state = State.TakingTurn;
             timer = 2f;
         }
+    }
+
+    private void SetStateTakeAction()
+    {
+        timer = 0.5f;
+        state = State.TakingTurn;
+    }
+
+    private bool TryTakeEnemyAIAction(Action onEnemyActionComplete)
+    {
+        Debug.Log("Taking Action");
+        foreach(Unit enemyUnit in UnitManager.Instance.GetEnemyUnitList())
+        {
+            if(TryTakeEnemyAIAction(enemyUnit, onEnemyActionComplete))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool TryTakeEnemyAIAction(Unit enemyUnit, Action onEnemyActionComplete)
+    {
+        GridPosition actionGridPosition = enemyUnit.GetGridPosition();
+        SpinAction spinAction = enemyUnit.GetSpinAction();
+
+        Debug.Log(spinAction);
+
+        if(!spinAction.IsValidActionGridPosition(actionGridPosition))
+        {
+            return false;
+        }
+        
+        if(!enemyUnit.TrySpendActionPointsToTakeAction(spinAction))
+        {
+            return false;
+        }
+
+        spinAction.TakeAction(actionGridPosition, onEnemyActionComplete);
+        return true;
     }
 }
