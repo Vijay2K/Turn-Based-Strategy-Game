@@ -26,18 +26,8 @@ public class SpinAction : BaseAction
         totalSpinAmount = 0;
         ActionStart(onActionComplete);
     }
-
-    public override int GetActionCost()
-    {
-        return 2;
-    }
     
-    public override string GetActionName()
-    {
-        return "Spin";
-    }
-
-    public override List<GridPosition> GetValidGridPositions()
+    public override List<GridPosition> GetValidActionGridPositionList()
     {
         GridPosition unitGridPosition = unit.GetGridPosition();
         return new List<GridPosition>()
@@ -45,4 +35,24 @@ public class SpinAction : BaseAction
             unitGridPosition
         };
     }
+
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        return new EnemyAIAction
+        {
+            gridPosition = gridPosition,
+            actionValue = 0
+        };
+    }
+
+    public override int GetActionCost()
+    {
+        return 1;
+    }
+    
+    public override string GetActionName()
+    {
+        return "Spin";
+    }
+
 }

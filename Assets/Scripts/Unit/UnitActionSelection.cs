@@ -34,6 +34,7 @@ public class UnitActionSelection : MonoBehaviour
     private void Start()
     {
         SetSelectedAction(selectedUnit.GetMoveAction());
+        TurnSystem.Instance.onTurnChanged += TurnSystem_OnTurnChanged;
     }
 
     private void Update()
@@ -118,5 +119,23 @@ public class UnitActionSelection : MonoBehaviour
     {
         isBusy = false;
         onBusyChanged?.Invoke(this, isBusy);
+    }
+
+    private void TurnSystem_OnTurnChanged(object sender, EventArgs args)
+    {
+        if(TurnSystem.Instance.IsPlayerTurn())
+        {
+            if(selectedUnit == null)
+            {
+                if(UnitManager.Instance.GetFriendlyUnitList().Count > 0)
+                {
+                    SetSelectedUnit(UnitManager.Instance.GetFriendlyUnitList()[0]);
+                }
+                else
+                {
+                    SetSelectedUnit(null);
+                }
+            }
+        }            
     }
 }

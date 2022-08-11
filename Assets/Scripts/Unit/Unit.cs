@@ -11,11 +11,12 @@ public class Unit : MonoBehaviour
     public static event EventHandler onAnyUnitSpawned;
     public static event EventHandler onAnyUnitDead;
 
-    private const int MAX_ACTION_POINTS = 5;
+    private const int MAX_ACTION_POINTS = 2;
 
     private GridPosition gridPosition;
     private MoveAction moveAction;
     private SpinAction spinAction;
+    private ShootAction shootAction;
     private BaseAction[] baseActionArray;
     private HealthSystem healthSystem;
     private int actionPoints = MAX_ACTION_POINTS;
@@ -26,6 +27,7 @@ public class Unit : MonoBehaviour
         spinAction = GetComponent<SpinAction>();
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
+        shootAction = GetComponent<ShootAction>();
 
         healthSystem.onDead += HealthSystem_OnDead;
     }
@@ -62,7 +64,7 @@ public class Unit : MonoBehaviour
         return false;
     }
 
-    private bool CanSpendActionPointsToTakeAction(BaseAction baseAction)
+    public bool CanSpendActionPointsToTakeAction(BaseAction baseAction)
     {
         return actionPoints >= baseAction.GetActionCost();
     }
@@ -75,7 +77,7 @@ public class Unit : MonoBehaviour
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs args)
     {
-        if(isEnemy && !TurnSystem.Instance.IsPlayerTurn() || 
+        if((isEnemy && !TurnSystem.Instance.IsPlayerTurn()) || 
             (!isEnemy && TurnSystem.Instance.IsPlayerTurn())) 
         {
             actionPoints = MAX_ACTION_POINTS;
@@ -102,6 +104,7 @@ public class Unit : MonoBehaviour
 
     public MoveAction GetMoveAction() => moveAction;
     public SpinAction GetSpinAction() => spinAction;
+    public ShootAction GetShootAction() => shootAction;
     public GridPosition GetGridPosition() => gridPosition;
     public BaseAction[] GetBaseActionArray() => baseActionArray;
     public int GetActionPoints() => actionPoints;

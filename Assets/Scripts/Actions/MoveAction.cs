@@ -42,7 +42,7 @@ public class MoveAction : BaseAction
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
-    public override List<GridPosition> GetValidGridPositions()
+    public override List<GridPosition> GetValidActionGridPositionList()
     {
         List<GridPosition> validGridPositionList = new List<GridPosition>();
 
@@ -71,6 +71,16 @@ public class MoveAction : BaseAction
         onStartMoving?.Invoke(this, EventArgs.Empty);
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
         ActionStart(onActionComplete);
+    }
+
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        int targetCountAtGridPosition = unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+        return new EnemyAIAction
+        {
+            gridPosition = gridPosition,
+            actionValue = targetCountAtGridPosition * 10
+        };
     }
 
     public override int GetActionCost()

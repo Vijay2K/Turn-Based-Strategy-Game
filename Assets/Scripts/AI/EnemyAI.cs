@@ -13,7 +13,7 @@ public class EnemyAI : MonoBehaviour
     private State state;
     private float timer;
 
-    private void Awake() 
+    private void Awake()
     {
         state = State.WaitForEnemyTurn;
     }
@@ -68,7 +68,6 @@ public class EnemyAI : MonoBehaviour
 
     private bool TryTakeEnemyAIAction(Action onEnemyActionComplete)
     {
-        Debug.Log("Taking Action");
         foreach(Unit enemyUnit in UnitManager.Instance.GetEnemyUnitList())
         {
             if(TryTakeEnemyAIAction(enemyUnit, onEnemyActionComplete))
@@ -82,22 +81,37 @@ public class EnemyAI : MonoBehaviour
 
     private bool TryTakeEnemyAIAction(Unit enemyUnit, Action onEnemyActionComplete)
     {
-        GridPosition actionGridPosition = enemyUnit.GetGridPosition();
-        SpinAction spinAction = enemyUnit.GetSpinAction();
+        EnemyAIAction bestEnemyAIAction = null;
+        BaseAction bestBaseAction = null;
 
-        Debug.Log(spinAction);
+        foreach(BaseAction baseAction in enemyUnit.GetBaseActionArray())
+        {
+            if(!enemyUnit.CanSpendActionPointsToTakeAction(baseAction)) continue;
 
-        if(!spinAction.IsValidActionGridPosition(actionGridPosition))
+            if(bestEnemyAIAction == null)
+            {
+                bestEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                bestBaseAction = baseAction;
+            }
+            else
+            {
+                EnemyAIAction enemyAIAction = baseAction.GetBestEnemyAIAction();
+                if(enemyAIAction != null && enemyAIAction.actionValue > bestEnemyAIAction.actionValue)
+                {
+                    bestEnemyAIAction = enemyAIAction;
+                    bestBaseAction = baseAction;
+                }
+            }
+        }
+
+        if(bestEnemyAIAction != null && enemyUnit.TrySpendActionPointsToTakeAction(bestBaseAction))
+        {
+            bestBaseAction.TakeAction(bestEnemyAIAction.gridPosition, onEnemyActionComplete);
+            return true;
+        }
+        else
         {
             return false;
         }
-        
-        if(!enemyUnit.TrySpendActionPointsToTakeAction(spinAction))
-        {
-            return false;
-        }
-
-        spinAction.TakeAction(actionGridPosition, onEnemyActionComplete);
-        return true;
     }
 }

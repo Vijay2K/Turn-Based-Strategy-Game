@@ -11,6 +11,7 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] private int health = 100;
 
     private int maxHealth;
+    private bool isDead;
 
     private void Start() 
     {
@@ -26,12 +27,12 @@ public class HealthSystem : MonoBehaviour
             Die();
         }
 
-        Debug.Log("Health : " + health);
         onGetDamage?.Invoke(this, EventArgs.Empty);
     }
 
     private void Die()
     {
+        isDead = true;
         onDead?.Invoke(this, EventArgs.Empty);
     }
 
@@ -39,4 +40,6 @@ public class HealthSystem : MonoBehaviour
     {
         return (float)health / maxHealth;
     }
+
+    public bool GetIsDead() => isDead;
 }
