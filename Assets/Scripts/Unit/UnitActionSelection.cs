@@ -39,6 +39,8 @@ public class UnitActionSelection : MonoBehaviour
 
     private void Update()
     {
+        if(UnitManager.Instance.GetFriendlyUnitList().Count <= 0) return;
+
         if (isBusy) return;
 
         if (!TurnSystem.Instance.IsPlayerTurn()) return;
@@ -125,17 +127,10 @@ public class UnitActionSelection : MonoBehaviour
     {
         if(TurnSystem.Instance.IsPlayerTurn())
         {
-            if(selectedUnit == null)
-            {
-                if(UnitManager.Instance.GetFriendlyUnitList().Count > 0)
-                {
-                    SetSelectedUnit(UnitManager.Instance.GetFriendlyUnitList()[0]);
-                }
-                else
-                {
-                    SetSelectedUnit(null);
-                }
-            }
-        }            
+            if(UnitManager.Instance.GetFriendlyUnitList().Count <= 0) return;
+            if(selectedUnit != null) return;
+
+            SetSelectedUnit(UnitManager.Instance.GetFriendlyUnitList()[0]);
+        }        
     }
 }

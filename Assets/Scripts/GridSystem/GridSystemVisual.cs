@@ -43,12 +43,9 @@ public class GridSystemVisual : MonoBehaviour
     private void Start() 
     {        
         UnitActionSelection.Instance.onSelectedActionChanged += UnitActionSelection_OnSelectedActionChanged;
-        LevelGrid.Instance.onAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition; 
-
-        foreach(HealthSystem healthSystem in FindObjectsOfType<HealthSystem>())
-        {
-            healthSystem.onDead += HealthSystem_OnDead;
-        }
+        LevelGrid.Instance.onAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition;
+        TurnSystem.Instance.onTurnChanged += TurnSystem_OnTurnChanged;
+        Unit.onAnyUnitDead += Unit_OnAnyUnitDead;
 
         UpdateVisual();
     }
@@ -141,7 +138,7 @@ public class GridSystemVisual : MonoBehaviour
         UpdateVisual();
     }
 
-    private void HealthSystem_OnDead(object sender, EventArgs args)
+    private void Unit_OnAnyUnitDead(object sender, EventArgs args)
     {
         UpdateVisual();
     }
@@ -149,5 +146,17 @@ public class GridSystemVisual : MonoBehaviour
     private void LevelGrid_OnAnyUnitMovedGridPosition(object sender, EventArgs args)
     {
         UpdateVisual();
+    }
+
+    public void TurnSystem_OnTurnChanged(object sender, EventArgs args)
+    {
+        if(sender is TurnSystem)
+        {
+            TurnSystem turnSystem = sender as TurnSystem;
+            if(!turnSystem.IsPlayerTurn())
+            {
+                HideAllGridPosition();
+            }
+        }
     }
 }

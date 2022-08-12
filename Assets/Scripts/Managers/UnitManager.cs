@@ -11,7 +11,7 @@ public class UnitManager : MonoBehaviour
     private List<Unit> friendlyUnitList;
     private List<Unit> enemyUnitList;
 
-    private void Awake() 
+    private void Awake()
     {
         if(Instance != null)
         {
