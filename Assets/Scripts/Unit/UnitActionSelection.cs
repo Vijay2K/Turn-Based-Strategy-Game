@@ -33,7 +33,7 @@ public class UnitActionSelection : MonoBehaviour
 
     private void Start()
     {
-        SetSelectedAction(selectedUnit.GetMoveAction());
+        SetSelectedAction(selectedUnit.GetAction<MoveAction>());
         TurnSystem.Instance.onTurnChanged += TurnSystem_OnTurnChanged;
     }
 
@@ -91,7 +91,7 @@ public class UnitActionSelection : MonoBehaviour
     private void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
-        SetSelectedAction(selectedUnit.GetMoveAction());
+        SetSelectedAction(selectedUnit.GetAction<MoveAction>());
         onSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }
 
