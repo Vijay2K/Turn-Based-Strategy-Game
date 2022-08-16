@@ -8,6 +8,7 @@ public class PathNode
     private int gCost;
     private int hCost;
     private int fCost;
+    private PathNode previousPathNode;
 
     public PathNode(GridPosition gridPosition)
     {
@@ -19,7 +20,34 @@ public class PathNode
         return gridPosition.ToString();
     }
 
+    public void SetGCost(int gCost)
+    {
+        this.gCost = gCost;
+    }
+
+    public void SetHCost(int hCost)
+    {
+        this.hCost = hCost;
+    }
+
+    public void SetPreviousPathNode(PathNode pathNode)
+    {
+        previousPathNode = pathNode;
+    }
+
+    public void CalculateFCost()
+    {
+        fCost = gCost + hCost;
+    }
+
+    public void ResetPreviousPathNode()
+    {
+        previousPathNode = null;
+    }
+
     public int GetGCost() => gCost;
     public int GetHCost() => hCost;
     public int GetFCost() => fCost;
+    public GridPosition GetGridPosition() => gridPosition;
+    public PathNode GetPreviousPathNode() => previousPathNode;
 }
