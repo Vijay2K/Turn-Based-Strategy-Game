@@ -9,6 +9,7 @@ public class PathNode
     private int hCost;
     private int fCost;
     private PathNode previousPathNode;
+    private bool isWalkable = true;
 
     public PathNode(GridPosition gridPosition)
     {
@@ -40,6 +41,11 @@ public class PathNode
         fCost = gCost + hCost;
     }
 
+    public void SetIsWalkable(bool isWalkable)
+    {
+        this.isWalkable = isWalkable;
+    }
+
     public void ResetPreviousPathNode()
     {
         previousPathNode = null;
@@ -50,4 +56,5 @@ public class PathNode
     public int GetFCost() => fCost;
     public GridPosition GetGridPosition() => gridPosition;
     public PathNode GetPreviousPathNode() => previousPathNode;
+    public bool IsWalkable() => isWalkable;
 }
