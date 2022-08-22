@@ -11,6 +11,7 @@ public class ShootAction : BaseAction
     }
     
     [SerializeField] private int maxShootDistance = 7;
+    [SerializeField] private LayerMask obstacleLayerMask;
 
     public class OnShootEventArgs : EventArgs
     {
@@ -132,6 +133,18 @@ public class ShootAction : BaseAction
 
                 Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
                 if(targetUnit.IsEnemy() == unit.IsEnemy()) continue;
+
+                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+                float unitShoulderHeight = 1.7f;
+
+                bool hasAnyObstacle = Physics.Raycast(unitWorldPosition + Vector3.up * unitShoulderHeight,
+                                shootDirection,
+                                Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                                obstacleLayerMask
+                                );
+
+                if(hasAnyObstacle) continue;
 
                 validGridPositionList.Add(gridPosition);
             }

@@ -613,6 +613,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxShootDistance: 7
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &3770649777548518890
 MonoBehaviour:
   m_ObjectHideFlags: 0
