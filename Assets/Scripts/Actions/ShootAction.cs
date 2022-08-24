@@ -19,6 +19,7 @@ public class ShootAction : BaseAction
         public Unit shootingUnit;
     }
 
+    public static event EventHandler<OnShootEventArgs> onAnyShoot;
     public event EventHandler<OnShootEventArgs> onShoot;
 
     private State state;
@@ -65,6 +66,12 @@ public class ShootAction : BaseAction
 
     private void Shoot()
     {
+        onAnyShoot.Invoke(this, new OnShootEventArgs
+        {
+            targetUnit = this.targetUnit,
+            shootingUnit = this.unit
+        });
+
         onShoot?.Invoke(this, new OnShootEventArgs
         {
             targetUnit = this.targetUnit,
