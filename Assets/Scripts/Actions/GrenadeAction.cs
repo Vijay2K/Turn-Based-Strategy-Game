@@ -54,7 +54,7 @@ public class GrenadeAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        Transform grenadeTransform = Instantiate(grenadePrefab, transform.position, Quaternion.identity);
+        Transform grenadeTransform = Instantiate(grenadePrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
         GrenadeProjectile grenadeProjectile = grenadeTransform.GetComponent<GrenadeProjectile>();
         grenadeProjectile.SetUp(gridPosition, OnGrenadeBehaviourComplete);
         ActionStart(onActionComplete);

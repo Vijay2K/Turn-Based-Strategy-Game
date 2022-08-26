@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour
     public static event EventHandler onAnyUnitSpawned;
     public static event EventHandler onAnyUnitDead;
 
-    private const int MAX_ACTION_POINTS = 2;
+    private const int MAX_ACTION_POINTS = 12;
 
     private GridPosition gridPosition;
     private BaseAction[] baseActionArray;

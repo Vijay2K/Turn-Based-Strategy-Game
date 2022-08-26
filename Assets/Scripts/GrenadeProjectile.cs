@@ -16,7 +16,7 @@ public class GrenadeProjectile : MonoBehaviour
     private float totalDistance;
     private Vector3 positionXY;
 
-    private void Update() 
+    private void Update()
     {
         Vector3 moveDirection = (targetPosition - positionXY).normalized;
         float moverSpeed = 15f;
@@ -40,6 +40,11 @@ public class GrenadeProjectile : MonoBehaviour
                 if(collider.TryGetComponent<Unit>(out Unit targetUnit))
                 {
                     targetUnit.Damage(30);
+                }
+
+                if(collider.TryGetComponent<DestructableCrate>(out DestructableCrate destructableCrate))
+                {
+                    destructableCrate.Damage();
                 }
             }
 
