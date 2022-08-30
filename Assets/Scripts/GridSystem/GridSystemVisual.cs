@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum GridVisualType
 {
-    WHITE, RED, BLUE, YELLOW, RED_SOFT
+    WHITE, RED, BLUE, YELLOW, RED_SOFT, GREEN, SOFT_GREEN
 }
 
 [Serializable]
@@ -83,6 +83,25 @@ public class GridSystemVisual : MonoBehaviour
         ShowGridPositionList(gridPositionInsideRangeList, gridVisualType);
     }
 
+    private void ShowGridPositionRangeSquare(GridPosition unitGridPosition, int range, GridVisualType gridVisualType)
+    {
+        List<GridPosition> gridPositionRangeList = new List<GridPosition>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int z = -range; z <= range; z++)
+            {
+                GridPosition gridPositionOffset =  new GridPosition(x, z);
+                GridPosition gridPosition = unitGridPosition + gridPositionOffset;
+
+                if(!LevelGrid.Instance.GetIsValidGridPosition(gridPosition)) continue;
+
+                gridPositionRangeList.Add(gridPosition);
+            }
+        }
+
+        ShowGridPositionList(gridPositionRangeList, gridVisualType);
+    }
+
     public void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
     {
         foreach(GridPosition gridPosition in gridPositionList)
@@ -116,6 +135,14 @@ public class GridSystemVisual : MonoBehaviour
                 break;
             case SpinAction spinAction:
                 gridVisualType = GridVisualType.BLUE;
+                break;
+            case GrenadeAction grenadeAction:
+                gridVisualType = GridVisualType.YELLOW;
+                break;
+            case SwordAction swordAction:
+                gridVisualType = GridVisualType.GREEN;
+                ShowGridPositionRangeSquare(selectedUnit.GetGridPosition(), swordAction.GetMaxAttackDistance(), 
+                GridVisualType.SOFT_GREEN);
                 break;
         }
 
