@@ -32,23 +32,15 @@ public class CameraController : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector3 moverInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-        Vector3 moverDirection = transform.forward * moverInput.z + transform.right * moverInput.x;
+        Vector2 moverInput = InputManager.Instance.GetMovementInput();
+        Vector3 moverDirection = transform.forward * moverInput.y + transform.right * moverInput.x;
         transform.position += moverDirection * cam_moverSpeed * Time.deltaTime;
     }
 
     private void HandleRotation()
     {
         Vector3 rotationVector = new Vector3(0, 0, 0);
-
-        if (Input.GetKey(KeyCode.Q))
-        {
-            rotationVector.y += 1f;
-        }
-        else if (Input.GetKey(KeyCode.E))
-        {
-            rotationVector.y += -1f;
-        }
+        rotationVector.y = InputManager.Instance.GetCameraRotateAmount();
 
         rotationVector.Normalize();
         transform.eulerAngles += rotationVector * cam_rotationSpeed * Time.deltaTime;
@@ -57,11 +49,11 @@ public class CameraController : MonoBehaviour
     private void HandleZoom()
     {
         float zoomValue = 1f;
-        if (Input.mouseScrollDelta.y > 0)
+        if (InputManager.Instance.GetMouseScrollDelta().y > 0)
         {
             targetFollowOffset.y -= zoomValue;
         }
-        else if (Input.mouseScrollDelta.y < 0)
+        else if (InputManager.Instance.GetMouseScrollDelta().y < 0)
         {
             targetFollowOffset.y += zoomValue;
         }

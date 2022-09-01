@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 3845582814265435454, guid: b42e8523b8146d0489cac275b45f5bb4,
         type: 3}
       propertyPath: maxShootDistance
-      value: 20
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7502739008300265951, guid: b42e8523b8146d0489cac275b45f5bb4,
         type: 3}
