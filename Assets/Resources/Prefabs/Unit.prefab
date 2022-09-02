@@ -730,7 +730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 10
-  maxGridPosition: 2
+  maxGridPosition: 4
 --- !u!114 &2953189953349379863
 MonoBehaviour:
   m_ObjectHideFlags: 0
